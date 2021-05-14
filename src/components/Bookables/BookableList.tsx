@@ -1,54 +1,77 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { bookables, sessions, days } from "../../static.json";
 import { FaArrowRight } from "react-icons/fa";
+import { reducer } from "./reducer";
+
+const initialState = {
+  group: "Rooms",
+  bookableIndex: 0,
+  hasDetails: true,
+  bookables,
+};
 
 const BookableList = () => {
-  const [bookableIndex, setBookableIndex] = useState(1);
-  const [group, setGroup] = useState("Kit");
-  const [hasDetails, setHasDetails] = useState(false);
+  //REDUCER
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const groups = Array.from(new Set(bookables.map((b) => b.group)));
-
-  const bookablesInGroup = bookables.filter((b) => b.group === group);
-  function nextBookable() {
-    setBookableIndex((i) => (i + 1) % bookablesInGroup.length);
-  }
-
+  const { group, bookableIndex, bookables, hasDetails } = state;
+  const bookablesInGroup = bookables.filter((b: any) => b.group === group);
+  const groups = Array.from(new Set(bookables.map((b: any) => b.group)));
   const bookable = bookablesInGroup[bookableIndex];
 
-  //HARD-CODE
-  // let bookableIndex = 1;
+  const changeGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch({
+      type: "SET_GROUP",
+      payload: e.target.value,
+    });
+  };
 
-  // const changeBookable=(selectedIndex:number)=>{
-  //     bookableIndex = selectedIndex;
-  //     console.log(selectedIndex)
-  // }
+  const setBookableIndex = (selectedIndex: number) => {
+    dispatch({
+      type: "SET_BOOKABLE",
+      payload: selectedIndex,
+    });
+  };
+
+  const nextBookable = () => {
+    dispatch({
+      type: "NEXT_BOOKABLE",
+    });
+  };
+
+  const toggleDetails = () => {
+    dispatch({
+      type: "TOGGLE_HAS_DETAILS",
+    });
+  };
+
+  console.log(state);
 
   return (
     <>
-    <div>
-      <select value={group} onChange={(e) => setGroup(e.target.value)}>
-        {groups.map((g) => (
-          <option value={g} key={g}>
-            {g}
-          </option>
-        ))}
-      </select>
-      <ul className="bookables items-list-nav">
-        {bookablesInGroup.map((b, i) => (
-          <li key={b.id} className={i === bookableIndex ? "selected" : ""}>
-            <button className="btn" onClick={() => setBookableIndex(i)}>
-              {b.title}
-            </button>
-          </li>
-        ))}
-      </ul>
-      <p>
-        <button className="btn" onClick={nextBookable} autoFocus>
-          <FaArrowRight />
-          <span>Next</span>
-        </button>
-      </p>
+      <div>
+        <select value={group} onChange={changeGroup}>
+          {groups.map((g: any) => (
+            <option value={g} key={g}>
+              {g}
+            </option>
+          ))}
+        </select>
+        <ul className="bookables items-list-nav">
+          {bookablesInGroup.map((b: any, i: any) => (
+            <li key={b.id} className={i === bookableIndex ? "selected" : ""}>
+              <button className="btn" onClick={() => setBookableIndex(i)}>
+                {b.title}
+              </button>
+            </li>
+          ))}
+        </ul>
+        <p>
+          <button className="btn" onClick={nextBookable} autoFocus>
+            <FaArrowRight />
+            <span>Next</span>
+          </button>
+        </p>
       </div>
       {bookable && (
         <div className="bookable-details">
@@ -60,7 +83,7 @@ const BookableList = () => {
                   <input
                     type="checkbox"
                     checked={hasDetails}
-                    onChange={() => setHasDetails((has) => !has)}
+                    onChange={toggleDetails}
                   />
                   Show Details
                 </label>
@@ -72,12 +95,12 @@ const BookableList = () => {
                 <h3>Availability</h3>
                 <div className="bookable-availability">
                   <ul>
-                    {bookable.days.sort().map((d) => (
+                    {bookable.days?.sort().map((d: any) => (
                       <li key={d}>{days[d]}</li>
                     ))}
                   </ul>
                   <ul>
-                    {bookable.sessions.map((s) => (
+                    {bookable.sessions.map((s: any) => (
                       <li key={s}>{sessions[s]}</li>
                     ))}
                   </ul>

@@ -7,8 +7,8 @@ const UserList = () => {
 
   const user = users[userIndex];
 
-  console.log(user);
-  return (<>
+  return (
+    <>
       <div className="users-list">
         <ul className="users items-list-nav">
           {users.map((u, i) => (
@@ -31,7 +31,8 @@ const UserList = () => {
           </div>
         </div>
       )}
-  </>);
+    </>
+  );
 };
 
 export default UserList;
