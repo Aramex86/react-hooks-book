@@ -45,8 +45,6 @@ const BookableList = () => {
     });
   };
 
-  console.log(state);
-
   return (
     <>
       <div>

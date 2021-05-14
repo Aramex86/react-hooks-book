@@ -108,7 +108,6 @@ main {
   max-width: 70em;
   grid-template-columns: 1fr 3fr;
   grid-column-gap: 40px;
-  align-items: center;
 }
 
 .items-list-nav {
@@ -192,4 +191,14 @@ main {
 
 .item-details .bookable-availability ul {
   list-style: square;
+}
+
+.date-picker {
+  display: flex;
+  margin: 0 0 1em;
+  justify-content: space-between;
+  align-items: center;
+}
+.date-picker button {
+  width: 8em;
 }
