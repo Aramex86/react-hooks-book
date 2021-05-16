@@ -193,6 +193,15 @@ main {
   list-style: square;
 }
 
+.date-picker input {
+  width: 8rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  border: 1px solid silver;
+  font-size: 100%;
+  text-align: center;
+}
+
 .date-picker {
   display: flex;
   margin: 0 0 1em;
