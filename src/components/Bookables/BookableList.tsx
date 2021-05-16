@@ -1,24 +1,47 @@
-import React, { useReducer, useState } from "react";
-import { bookables, sessions, days } from "../../static.json";
+import React, { useEffect, useReducer, useState } from "react";
+import { sessions, days } from "../../static.json";
 import { FaArrowRight } from "react-icons/fa";
 import { reducer } from "./reducer";
+import Spinner from "../UI/Spinner";
+import { getData } from "../../Utils/utils";
 
 const initialState = {
   group: "Rooms",
   bookableIndex: 0,
   hasDetails: true,
-  bookables,
+  bookables: [],
+  isLoading: true,
+  error: false,
 };
 
 const BookableList = () => {
   //REDUCER
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { group, bookableIndex, bookables, hasDetails } = state;
+  const { isLoading, error, hasDetails } = state;
+  const { group, bookableIndex, bookables } = state;
   const bookablesInGroup = bookables.filter((b: any) => b.group === group);
   const groups = Array.from(new Set(bookables.map((b: any) => b.group)));
   const bookable = bookablesInGroup[bookableIndex];
 
+  useEffect(() => {
+    dispatch({ type: "FETCH_BOOKABLES_REQUEST" });
+    getData("http://localhost:301/bookables")
+      .then((bookables) =>
+        dispatch({
+          type: "FETCH_BOOKABLES_SUCCESS",
+          payload: bookables,
+        })
+      )
+      .catch((error) =>
+        dispatch({
+          type: "FETCH_BOOKABLES_ERROR",
+          payload: error,
+        })
+      );
+  }, []);
+
+  console.log(state);
   const changeGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({
       type: "SET_GROUP",
@@ -44,6 +67,11 @@ const BookableList = () => {
       type: "TOGGLE_HAS_DETAILS",
     });
   };
+
+
+  if(error) return <p>{error.message}</p>
+
+  if(isLoading) return <p><Spinner/> Loading bookables...</p>
 
   return (
     <>

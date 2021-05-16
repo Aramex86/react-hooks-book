@@ -21,11 +21,33 @@ export const reducer = (state: any, action: any) => {
 
     case "NEXT_BOOKABLE":
       const count = state.bookables.filter(
-        (b:any) => b.group === state.group
+        (b: any) => b.group === state.group
       ).length;
       return {
         ...state,
         bookableIndex: (state.bookableIndex + 1) % count,
+      };
+
+    case "FETCH_BOOKABLES_REQUEST":
+      return {
+        ...state,
+        isLoading: true,
+        error: false,
+        bookables: [],
+      };
+
+    case "FETCH_BOOKABLES_SUCCESS":
+      return {
+        ...state,
+        isLoading: false,
+        bookables: action.payload,
+      };
+
+    case "FETCH_BOOKABLES_ERROR":
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
       };
     default:
       return state;
