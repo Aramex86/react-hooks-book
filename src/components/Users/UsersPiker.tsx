@@ -16,7 +16,6 @@ const UsersPiker = () => {
 
   if (users.length === 0) return <Spinner />;
 
-  console.log(users);
   return (
     <select>
       {users.map((u: any) => (

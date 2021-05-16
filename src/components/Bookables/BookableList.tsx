@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { sessions, days } from "../../static.json";
 import { FaArrowRight } from "react-icons/fa";
 import { reducer } from "./reducer";
@@ -23,6 +23,8 @@ const BookableList = () => {
   const bookablesInGroup = bookables.filter((b: any) => b.group === group);
   const groups = Array.from(new Set(bookables.map((b: any) => b.group)));
   const bookable = bookablesInGroup[bookableIndex];
+  // const timerRef = useRef<any>(null);
+  const nextButtonRef = useRef<any>();
 
   useEffect(() => {
     dispatch({ type: "FETCH_BOOKABLES_REQUEST" });
@@ -41,7 +43,18 @@ const BookableList = () => {
       );
   }, []);
 
-  console.log(state);
+  // useEffect(() => {
+  //   timerRef.current = setInterval(() => {
+  //     dispatch({ type: "NEXT_BOOKABLE" });
+  //   }, 3000);
+
+  //   return stopPresentation;
+  // }, []);
+
+  // function stopPresentation() {
+  //   clearInterval(timerRef.current);
+  // }
+
   const changeGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch({
       type: "SET_GROUP",
@@ -54,6 +67,7 @@ const BookableList = () => {
       type: "SET_BOOKABLE",
       payload: selectedIndex,
     });
+    nextButtonRef.current.focus();
   };
 
   const nextBookable = () => {
@@ -68,10 +82,14 @@ const BookableList = () => {
     });
   };
 
+  if (error) return <p>{error.message}</p>;
 
-  if(error) return <p>{error.message}</p>
-
-  if(isLoading) return <p><Spinner/> Loading bookables...</p>
+  if (isLoading)
+    return (
+      <p>
+        <Spinner /> Loading bookables...
+      </p>
+    );
 
   return (
     <>
@@ -93,7 +111,12 @@ const BookableList = () => {
           ))}
         </ul>
         <p>
-          <button className="btn" onClick={nextBookable} autoFocus>
+          <button
+            className="btn"
+            onClick={nextBookable}
+            autoFocus
+            ref={nextButtonRef}
+          >
             <FaArrowRight />
             <span>Next</span>
           </button>
@@ -113,6 +136,9 @@ const BookableList = () => {
                   />
                   Show Details
                 </label>
+                {/* <button className="btn" onClick={stopPresentation}>
+                  Stop
+                </button> */}
               </span>
             </div>
             <p>{bookable.notes}</p>
