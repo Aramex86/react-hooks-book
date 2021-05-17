@@ -1,30 +1,34 @@
-import React, { useReducer } from "react";
+import React, { useCallback, useReducer, useState } from "react";
 import BookableList from "./BookableList";
 import BookablesDetails from "./BookablesDetails";
 
-import {reducer} from "./reducer";
+import { reducer } from "./reducer";
 
 const initialState = {
   group: "Rooms",
   bookableIndex: 0,
   bookables: [],
   isLoading: false,
-  error: false
+  error: false,
 };
 
-
 const BookablesView = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [bookable, setBookable] = useState<any>();
 
-    const [state, dispatch] = useReducer(reducer, initialState);
+  const updateBookable=useCallback((selected: any)=>{
+      if (selected) {
+          selected.lastShown = Date.now();
+          setBookable(selected);
+          console.log(selected)
+        }
+    },[]) 
+  
 
-    const bookablesInGroup = state.bookables.filter(
-     (b:any) => b.group === state.group
-    );
-    const bookable = bookablesInGroup[state.bookableIndex];
   return (
     <>
-      <BookableList state={state} dispatch={dispatch}/>
-      <BookablesDetails bookable={bookable}/>
+      <BookableList bookable={bookable} setBookable={updateBookable} />
+      <BookablesDetails bookable={bookable} />
     </>
   );
 };
