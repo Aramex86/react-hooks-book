@@ -3,57 +3,46 @@ import { useState } from "react";
 import { getData } from "../../Utils/utils";
 import Spinner from "../UI/Spinner";
 
-const UserList = () => {
-  const [userIndex, setUserIndex] = useState(0);
-  const [users, setUsers] = useState<Array<any>>([]);
-  const [error, setError] = useState<any>();
+const UserList = ({ user, setUser }: any) => {
+  const [error, setError] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  const user = users[userIndex];
+  const [users, setUsers] = useState<any>(null);
 
   useEffect(() => {
     getData("http://localhost:3001/users")
-      .then((res) => {
-        setUsers(res);
+      .then((data) => {
+        setUser(data[0]); // set initial user to first (or undefined)
+        setUsers(data);
         setIsLoading(false);
       })
-      .catch((err) => setError(err));
-  }, []);
+      .catch((error) => {
+        setError(error);
+        setIsLoading(false);
+      });
+  }, [setUser]); // pass in dependency
 
-  if (error) return <p>{error.message}</p>;
+  if (error) {
+    return <p>{error.message}</p>;
+  }
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <p>
-        <Spinner /> Loading Users...
+        <Spinner /> Loading users...
       </p>
     );
+  }
 
   return (
-    <>
-      <div className="users-list">
-        <ul className="users items-list-nav">
-          {users.map((u, i) => (
-            <li key={u.id} className={i === userIndex ? "selected" : ""}>
-              <button className="btn" onClick={() => setUserIndex(i)}>
-                {u.name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      {users && (
-        <div className="user-details">
-          <div className="item">
-            <div className="item-header">
-              <h2>{user.name}</h2>
-            </div>
-            <h3>{user.title}</h3>
-            <p>{user.notes}</p>
-          </div>
-        </div>
-      )}
-    </>
+    <ul className="users items-list-nav">
+      {users.map((u: any) => (
+        <li key={u.id} className={u.id === user?.id ? "selected" : ""}>
+          <button className="btn" onClick={() => setUser(u)}>
+            {u.name}
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 };
 
