@@ -13,12 +13,6 @@ export const reducer = (state: any, action: any) => {
         bookableIndex: action.payload,
       };
 
-    case "TOGGLE_HAS_DETAILS":
-      return {
-        ...state,
-        hasDetails: !state.hasDetails,
-      };
-
     case "NEXT_BOOKABLE":
       const count = state.bookables.filter(
         (b: any) => b.group === state.group

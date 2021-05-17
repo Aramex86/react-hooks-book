@@ -12,7 +12,7 @@ const UserList = () => {
   const user = users[userIndex];
 
   useEffect(() => {
-    getData("http://localhost:301/users")
+    getData("http://localhost:3001/users")
       .then((res) => {
         setUsers(res);
         setIsLoading(false);

@@ -6,7 +6,7 @@ const UsersPiker = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      await fetch(`http://localhost:301/users`)
+      await fetch(`http://localhost:3001/users`)
         .then((res) => res.json())
         .then((res) => setUsers(res));
     };
