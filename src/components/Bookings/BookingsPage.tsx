@@ -1,11 +1,14 @@
-import React from "react";
-import WeekPicker from "./WeekPiker";
+import React, { useReducer, useState } from "react";
+import BookablesList from "../Bookables/BookableList";
+import Bookings from "./Bookings";
 
 const BookingsPage = () => {
+  const [bookable, setBookable] = useState<any>(null);
+
   return (
     <main className="bookings-page">
-      <p>Bookings!</p>
-      <WeekPicker date={new Date()} />
+      <BookablesList bookable={bookable} setBookable={setBookable} />
+      <Bookings bookable={bookable} />
     </main>
   );
 };

@@ -1,6 +1,4 @@
-import React, { useReducer, useRef, useState } from "react";
-import reducer from "./reducer";
-import { getWeek } from "../../Utils/utils";
+import React, { useState } from "react";
 import {
   FaChevronLeft,
   FaCalendarDay,
@@ -8,8 +6,7 @@ import {
   FaCalendarCheck,
 } from "react-icons/fa";
 
-const WeekPicker = ({ date }: any) => {
-  const [week, dispatch] = useReducer(reducer, date, getWeek);
+const WeekPicker = ({ dispatch }: any) => {
   const [dateText, setDateText] = useState("2020-06-24");
 
   // const textboxRef = useRef<any>();
@@ -55,9 +52,9 @@ const WeekPicker = ({ date }: any) => {
           <FaChevronRight />
         </button>
       </p>
-      <p>
+      {/* <p>
         {week.start.toDateString()} - {week.end.toDateString()}
-      </p>
+      </p> */}
     </div>
   );
 };

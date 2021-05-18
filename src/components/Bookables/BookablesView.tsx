@@ -16,14 +16,12 @@ const BookablesView = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [bookable, setBookable] = useState<any>();
 
-  const updateBookable=useCallback((selected: any)=>{
-      if (selected) {
-          selected.lastShown = Date.now();
-          setBookable(selected);
-          console.log(selected)
-        }
-    },[]) 
-  
+  const updateBookable = useCallback((selected: any) => {
+    if (selected) {
+      selected.lastShown = Date.now();
+      setBookable(selected);
+    }
+  }, []);
 
   return (
     <>
